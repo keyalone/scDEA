@@ -167,7 +167,7 @@ scDEA integrates tweleve state-of-the-art methods:  Beta-poisson mixture model (
 DEsingle, DESeq2, edgeR, Model-based analysis of single-cell transcriptomics (MAST), monocle, scDD,
 T-test, Wilcoxon rank sum test (Wilcoxon test), limma, Seurat and zingeR.edgeR.
 This function depends on the follwing R package: BPSC, DEsingle, DESeq2, edgeR, MAST, monocle, scDD,
-limma, Seurat, zingeR, SingleCellExperiment, scater, dplyr.
+limma, Seurat, zingeR, SingleCellExperiment, dplyr.
 These packages will be automatically installed along
 with scDEA. \cr
 }

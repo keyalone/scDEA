@@ -7,7 +7,6 @@
 #'
 #' @importFrom SingleCellExperiment SingleCellExperiment
 #'
-#' @importFrom scater calculateQCMetrics
 #'
 #' @param Data single-cell RNA-seq matrix. The format could be raw-counts, FPKM/RPKM, TPM or UMI-counts. The matrix need include gene names and cell names.
 #' @param group group information. The cell need be divided into two category.
@@ -50,7 +49,7 @@ data_process <- function(Data, group, norm.form = "CPM",  is.normalized = FALSE)
     sce <- SingleCellExperiment::SingleCellExperiment(assays = list(counts = counts_relative, normcounts = normcounts),
                                                       colData = cell_df,
                                                       rowData = gene_df)
-    sce <- scater::calculateQCMetrics(sce)
+    # sce <- scater::calculateQCMetrics(sce)
   } else
   {
     normcounts <- normalized(Data, method = norm.form)
@@ -62,7 +61,7 @@ data_process <- function(Data, group, norm.form = "CPM",  is.normalized = FALSE)
     sce <- SingleCellExperiment::SingleCellExperiment(assays = list(counts = Data, normcounts = normcounts),
                                                       colData = cell_df,
                                                       rowData = gene_df)
-    sce <- scater::calculateQCMetrics(sce)
+    # sce <- scater::calculateQCMetrics(sce)
   }
 
   return(sce)
@@ -417,13 +416,12 @@ jaccard_index <- function(results1, results2, cutoff = c(200, 400, 600, 1000)){
 #' DEsingle, DESeq2, edgeR, Model-based analysis of single-cell transcriptomics (MAST), monocle, scDD,
 #' T-test, Wilcoxon rank sum test (Wilcoxon test), limma, Seurat and zingeR.edgeR.
 #' This function depends on the follwing R package: BPSC, DEsingle, DESeq2, edgeR, MAST, monocle, scDD,
-#' limma, Seurat, zingeR, SingleCellExperiment, scater, dplyr.
+#' limma, Seurat, zingeR, SingleCellExperiment, dplyr.
 #' These packages will be automatically installed along
 #' with scDEA. \cr
 #'
 #' @importFrom monocle relative2abs
 #' @importFrom SingleCellExperiment SingleCellExperiment
-#' @importFrom scater calculateQCMetrics
 #' @importFrom stats median p.adjust model.matrix wilcox.test
 #' @importFrom BPSC BPglm
 #' @importFrom DEsingle DEsingle DEtype
