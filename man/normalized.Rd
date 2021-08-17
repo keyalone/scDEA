@@ -9,7 +9,7 @@ normalized(counts.matrix, method = "CPM")
 \arguments{
 \item{counts.matrix}{count expression matrix}
 
-\item{method}{character. "TMM", "RLE", "CPM", "TPM". The default value is "CPM".}
+\item{method}{character. "TMM", "RLE", "CPM". The default value is "CPM".}
 }
 \description{
 The function provide several normalized methods

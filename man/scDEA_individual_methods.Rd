@@ -92,13 +92,13 @@ scDEA_individual_methods(
 
 \item{BPSC.coef}{an integer to point out the column index corresponding to the coefficient for the generalized linear mode (GLM) testing in BPSC. Default value is 2.}
 
-\item{BPSC.normalize}{a string variable specifying the type of size factor estimation in BPSC method. Possible values: "TMM", "RLE", "CPM", "TPM". Default is "CPM".}
+\item{BPSC.normalize}{a string variable specifying the type of size factor estimation in BPSC method. Possible values: "TMM", "RLE", "CPM". Default is "CPM".}
 
 \item{BPSC.parallel}{a boolean variable that defines whether to execute parallel computing for BPSC method. Default is TRUE.}
 
 \item{DEsingle.parallel}{a boolean variable that defines whether to execute parallel computing for DEsingle method. Default is TRUE.}
 
-\item{DEsingle.normalize}{a string variable specifying the type of size factor estimation in DEsingle method. Possible values: "TMM", "RLE", "CPM", "TPM". Default is "CPM".}
+\item{DEsingle.normalize}{a string variable specifying the type of size factor estimation in DEsingle method. Possible values: "TMM", "RLE", "CPM". Default is "CPM".}
 
 \item{DESeq2.test}{a string variable specifying the type of test the difference in deviance between a full and reduced model formula in DESeq2 method. Possible values: "Wald" or "LRT". The values represent Wald tests or likelihood ratio test. Default is "Wald".}
 
@@ -108,11 +108,11 @@ scDEA_individual_methods(
 
 \item{DESeq2.fitType}{a string variable specifying the type of fitting of dispersions to the mean intensity in DESeq2 method. Possible values: "parametric", "local", "mean". Default is "parametric".}
 
-\item{DESeq2.normalize}{a string variable specifying the type of size factor estimation in DESeq2 method. Possible values: "TMM", "RLE", "CPM", "TPM". Default is "CPM".}
+\item{DESeq2.normalize}{a string variable specifying the type of size factor estimation in DESeq2 method. Possible values: "TMM", "RLE", "CPM". Default is "CPM".}
 
 \item{edgeR.Test}{a string variable specifying the type of fitting distribution to count data for each gene. Possible values: "LRT", "QLFT". The values represent negative binomial generalized log-linear model and quasi-likelihood negative binomial generalized log-linear model. Default is "QLFT".}
 
-\item{edgeR.normalize}{a string variable specifying the type of size factor estimation in edgeR method. Possible values: "TMM", "RLE", "CPM", "TPM". Default is "CPM".}
+\item{edgeR.normalize}{a string variable specifying the type of size factor estimation in edgeR method. Possible values: "TMM", "RLE", "CPM". Default is "CPM".}
 
 \item{limma.method.fit}{a string variable specifying the type of fitting method in limma method. Possible values: "ls", "robust". The values represent least squares and robust regression. Default is "ls".}
 
@@ -120,21 +120,21 @@ scDEA_individual_methods(
 
 \item{limma.robust}{a boolean variable that defines whether or not to estimate defined prior information and variance prior against outlier sample variances in limma method. Default is TRUE.}
 
-\item{limma.normalize}{a string variable specifying the type of size factor estimation in limma method. Possible values: "TMM", "RLE", "CPM", "TPM". Default is "CPM".}
+\item{limma.normalize}{a string variable specifying the type of size factor estimation in limma method. Possible values: "TMM", "RLE", "CPM". Default is "CPM".}
 
-\item{Seurat.normalize}{a string variable specifying the type of size factor estimation in Seurat method. Possible values: "TMM", "RLE", "CPM", "TPM". Default is "CPM".}
+\item{Seurat.normalize}{a string variable specifying the type of size factor estimation in Seurat method. Possible values: "TMM", "RLE", "CPM". Default is "CPM".}
 
 \item{Seurat.method}{a string variable specifying the type of test method in Seurat method. Possible values: "LR", "bimod", "roc". The values represent likelihood-ratio test, negative binomial generalized linear model, ROC analysis. Default is "bimod".}
 
 \item{MAST.method}{a string variable specifying the type of test method in MAST method. Possible values: "glm", "glmer", "bayesglm". Default is "bayesglm".}
 
-\item{MAST.normalize}{a string variable specifying the type of size factor estimation in Seurat method. Possible values: "TMM", "RLE", "CPM", "TPM". Default is "CPM".}
+\item{MAST.normalize}{a string variable specifying the type of size factor estimation in Seurat method. Possible values: "TMM", "RLE", "CPM". Default is "CPM".}
 
 \item{MAST.parallel}{a boolean variable that defines whether to execute parallel computing for MAST method. Default is TRUE.}
 
 \item{monocle.cores}{the number of cores to be used while testing each gene for differential expression.. Default is 1.}
 
-\item{monocle.normalize}{a string variable specifying the type of size factor estimation in monocle method. Possible values: "TMM", "RLE", "CPM", "TPM". Default is "CPM".}
+\item{monocle.normalize}{a string variable specifying the type of size factor estimation in monocle method. Possible values: "TMM", "RLE", "CPM". Default is "CPM".}
 
 \item{scDD.alpha1}{prior parameter value to be used to model each gene as a mixture of DP normals in scDD method. Default is 0.01.}
 
@@ -146,15 +146,15 @@ scDEA_individual_methods(
 
 \item{scDD.b0}{prior parameter values to be used to model each gene as a mixture of DP normals in scDD method. Default is 0.01.}
 
-\item{scDD.normalize}{a string variable specifying the type of size factor estimation in scDD method. Possible values:  "TMM", "RLE", "CPM", "TPM". Default is "CPM".}
+\item{scDD.normalize}{a string variable specifying the type of size factor estimation in scDD method. Possible values:  "TMM", "RLE", "CPM". Default is "CPM".}
 
 \item{scDD.permutation}{the number of permutations to be used in calculating empirical p-values in scDD method. If the parameter value is set to 0, the full Bayes Factor will not be performed. Else, scDD method takes the nonparametric Kolmogorove-Smirnov test to identify DGEs. Default is 0.}
 
-\item{Ttest.normalize}{a string variable specifying the type of size factor estimation in t-test method. Possible values: "TMM", "RLE", "CPM", "TPM". Default is "CPM".}
+\item{Ttest.normalize}{a string variable specifying the type of size factor estimation in t-test method. Possible values: "TMM", "RLE", "CPM". Default is "CPM".}
 
-\item{Wilcoxon.normalize}{a string variable specifying the type of size factor estimation in Wilcoxon method. Possible values: "TMM", "RLE", "CPM", "TPM". Default is "CPM".}
+\item{Wilcoxon.normalize}{a string variable specifying the type of size factor estimation in Wilcoxon method. Possible values: "TMM", "RLE", "CPM". Default is "CPM".}
 
-\item{zingeR.edgeR.normalize}{a string variable specifying the type of size factor estimation in zingeR.edgeR method. Possible values: "TMM", "RLE", "CPM", "TPM". Default is "CPM".}
+\item{zingeR.edgeR.normalize}{a string variable specifying the type of size factor estimation in zingeR.edgeR method. Possible values: "TMM", "RLE", "CPM". Default is "CPM".}
 
 \item{zingeR.edgeR.maxit.EM}{The number of iterations for EM-algorithm in zingeR.edgeR method. If the EM-algorithm does not stop automatically, then, the algorithm may not be convergence. The user need set a larger value. Default is 100.}
 }
@@ -172,10 +172,10 @@ These packages will be automatically installed along
 with scDEA. \cr
 }
 \examples{
-data("Grun.counts.matrix")
+data("Grun.counts.hvg")
 data("Grun.group.information")
 # scDD is very slow
-Pvals <- scDEA_individual_methods(raw.count = Grun.counts.matrix,
+Pvals <- scDEA_individual_methods(raw.count = Grun.counts.hvg,
 cell.label = Grun.group.information,  verbose = FALSE)
 combination.Pvals <- lancaster.combination(Pvals, weight = TRUE, trimmed = 0.2)
 adjusted.Pvals <- scDEA.p.adjust(combination.Pvals, adjusted.method = "bonferroni")

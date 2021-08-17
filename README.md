@@ -1,7 +1,9 @@
 # scDEA
-R package applies ensemble learning for single-cell differential expression analysis on single-cell RNA-seq dataset.
+R package applies ensemble learning for single-cell differential expression analysis on single-cell RNA-seq dataset. Besides,  we also develop a web service (e.g., Shiny Application) for users who do not have a strong programming background. Just load on the website , upload the data and download the results. Enjoy!
 
-The scDEA package has the following R-pakage dependencies: BPSC, DEsingle, DESeq2, edgeR, MAST, monocle, scDD, limma, Seurat, zingeR, SingleCellExperiment, scater, aggregation. In the dependencies, you can load on most of dependency packages on your R. If the dependencies are not installed correctly, please install them by yourself.
+However, if you prefer to apply scDEA using R. The first step is to install scDEA in R. 
+
+The scDEA package has the following R-pakage dependencies: BPSC, DEsingle, DESeq2, edgeR, MAST, monocle, scDD, limma, Seurat, zingeR, SingleCellExperiment, scater, aggregation. In the dependencies, you can load on most of dependency packages on your R. If the dependencies are not installed correctly, please install them by yourself. In my experience, the scDEA can't install BPSC, DEsingle and zingeR automatically. Hence, we advise, users should install BPSC, DEsingle and zingeR firstly by the following instruction. Then, install scDEA and run scDEA. Enjoy!
 
 ## BPSC (https://github.com/nghiavtr/BPSC)
 library(devtools)
@@ -110,11 +112,11 @@ install.packages("aggregation")
  
  # Step 5. Simply run the scDEA on the Grun datasets.
 
- data("Grun.counts.matrix")
+ data("Grun.counts.hvg")
 
  data("Grun.group.information")
 
- Pvals <- scDEA_individual_methods(raw.count = Grun.counts.matrix,
+ Pvals <- scDEA_individual_methods(raw.count = Grun.counts.hvg,
 
  cell.label = Grun.group.information, DESeq2.parallel = FALSE, scDD = FALSE, monocle.parallel = FALSE)
 

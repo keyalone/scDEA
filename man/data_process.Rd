@@ -11,7 +11,7 @@ data_process(Data, group, norm.form = "CPM", is.normalized = FALSE)
 
 \item{group}{group information. The cell need be divided into two category.}
 
-\item{norm.form}{character item. We provide several normalized method for raw-counts data. The method include "TMM","RLE", "CPM", "TPM". The default is "CPM".}
+\item{norm.form}{character item. We provide several normalized method for raw-counts data. The method include "TMM","RLE", "CPM". The default is "CPM".}
 
 \item{is.normalized}{logical. A logical flag to determin whether or not the input dataset normalizes. If TRUE, we will take the Data as normcounts and input for downstream analysis. If not, we provide method for the process.}
 }
@@ -28,9 +28,9 @@ We take \code{\link[monocle]{relative2abs}} transfering relative expression valu
 However, the process maybe break the original dataset statistical properties. Hence, we advise user don't normalize firstly.
 }
 \examples{
-data("Grun.counts.matrix")
+data("Grun.counts.hvg")
 data("Grun.group.information")
-sce <- data_process(Data = Grun.counts.matrix, group = Grun.group.information)
+sce <- data_process(Data = Grun.counts.hvg, group = Grun.group.information)
 }
 \author{
 Huisheng, Li,  <lihs@mails.ccnu.edu.cn>

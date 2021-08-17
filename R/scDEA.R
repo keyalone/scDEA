@@ -11,7 +11,7 @@
 #'
 #' @param Data single-cell RNA-seq matrix. The format could be raw-counts, FPKM/RPKM, TPM or UMI-counts. The matrix need include gene names and cell names.
 #' @param group group information. The cell need be divided into two category.
-#' @param norm.form character item. We provide several normalized method for raw-counts data. The method include "TMM","RLE", "CPM", "TPM". The default is "CPM".
+#' @param norm.form character item. We provide several normalized method for raw-counts data. The method include "TMM","RLE", "CPM". The default is "CPM".
 #' @param is.normalized logical. A logical flag to determin whether or not the input dataset normalizes. If TRUE, we will take the Data as normcounts and input for downstream analysis. If not, we provide method for the process.
 #'
 #' @return
@@ -19,9 +19,9 @@
 #'   \item \strong{sce} :  A \code{\linkS4class{SingleCellExperiment}} item. The object include expression matrix, group information. The expression matrix contains counts and normcounts.
 #' }
 #' @examples
-#' data("Grun.counts.matrix")
+#' data("Grun.counts.hvg")
 #' data("Grun.group.information")
-#' sce <- data_process(Data = Grun.counts.matrix, group = Grun.group.information)
+#' sce <- data_process(Data = Grun.counts.hvg, group = Grun.group.information)
 #' @details
 #' We take \code{\link[monocle]{relative2abs}} transfering relative expression values into absolute transcript counts.
 #' However, the process maybe break the original dataset statistical properties. Hence, we advise user don't normalize firstly.
@@ -73,13 +73,12 @@ data_process <- function(Data, group, norm.form = "CPM",  is.normalized = FALSE)
 #'
 #' The function provide several normalized methods
 #' @importFrom edgeR calcNormFactors
-#' @importFrom scater calculateCPM calculateTPM calculateFPKM
 #' @importFrom SingleCellExperiment SingleCellExperiment
 #' @importFrom stats median
 #'
 #'
 #' @param counts.matrix count expression matrix
-#' @param method character. "TMM", "RLE", "CPM", "TPM". The default value is "CPM".
+#' @param method character. "TMM", "RLE", "CPM". The default value is "CPM".
 #'
 #'
 #'
@@ -99,29 +98,31 @@ normalized <- function(counts.matrix, method = "CPM"){
     return(norm.item)
   }
   if(method == "CPM"){
-    sce <- SingleCellExperiment::SingleCellExperiment(assays = list(counts = counts.matrix))
-    gene_df <- DataFrame(Gene = rownames(sce))
-    cell_df <- DataFrame(cell = colnames(sce))
-    rownames(gene_df) <- gene_df$Gene
-    rownames(cell_df) <- cell_df$cell
-    sce <- SingleCellExperiment::SingleCellExperiment(assays = list(counts = counts.matrix),
-                                                      colData = cell_df,
-                                                      rowData = gene_df)
-    norm.item <- scater::calculateCPM(sce, use_size_factors = FALSE)
+    # sce <- SingleCellExperiment::SingleCellExperiment(assays = list(counts = counts.matrix))
+    # gene_df <- DataFrame(Gene = rownames(sce))
+    # cell_df <- DataFrame(cell = colnames(sce))
+    # rownames(gene_df) <- gene_df$Gene
+    # rownames(cell_df) <- cell_df$cell
+    # sce <- SingleCellExperiment::SingleCellExperiment(assays = list(counts = counts.matrix),
+    #                                                   colData = cell_df,
+    #                                                   rowData = gene_df)
+    # norm.item <- scater::calculateCPM(sce)
+    norm_factor <- colSums(counts.matrix)
+    norm.item <- t(t(counts.matrix)/norm_factor) * 1e6
     return(norm.item)
   }
-  if(method == "TPM"){
-    sce <- SingleCellExperiment::SingleCellExperiment(assays = list(counts = counts.matrix))
-    gene_df <- DataFrame(Gene = rownames(sce))
-    cell_df <- DataFrame(cell = colnames(sce))
-    rownames(gene_df) <- gene_df$Gene
-    rownames(cell_df) <- cell_df$cell
-    sce <- SingleCellExperiment::SingleCellExperiment(assays = list(counts = counts.matrix),
-                                                      colData = cell_df,
-                                                      rowData = gene_df)
-    norm.item <- scater::calculateTPM(sce, exprs_values = "counts")
-    return(norm.item)
-  }
+  # if(method == "TPM"){
+  #   sce <- SingleCellExperiment::SingleCellExperiment(assays = list(counts = counts.matrix))
+  #   gene_df <- DataFrame(Gene = rownames(sce))
+  #   cell_df <- DataFrame(cell = colnames(sce))
+  #   rownames(gene_df) <- gene_df$Gene
+  #   rownames(cell_df) <- cell_df$cell
+  #   sce <- SingleCellExperiment::SingleCellExperiment(assays = list(counts = counts.matrix),
+  #                                                     colData = cell_df,
+  #                                                     rowData = gene_df)
+  #   norm.item <- scater::calculateTPM(sce, exprs_values = "counts")
+  #   return(norm.item)
+  # }
 }
 
 # perform BPSC
@@ -422,7 +423,7 @@ jaccard_index <- function(results1, results2, cutoff = c(200, 400, 600, 1000)){
 #'
 #' @importFrom monocle relative2abs
 #' @importFrom SingleCellExperiment SingleCellExperiment
-#' @importFrom scater calculateQCMetrics calculateTPM calculateFPKM calculateCPM
+#' @importFrom scater calculateQCMetrics
 #' @importFrom stats median p.adjust model.matrix wilcox.test
 #' @importFrom BPSC BPglm
 #' @importFrom DEsingle DEsingle DEtype
@@ -457,47 +458,47 @@ jaccard_index <- function(results1, results2, cutoff = c(200, 400, 600, 1000)){
 #' @param Seurat a boolean variable that defines whether to perform DE analysis using the Seurat method. Default is TRUE.
 #' @param zingeR.edgeR a boolean variable that defines whether to perform DE analysis using the zingeR.edgeR method. Default is TRUE.
 #' @param BPSC.coef an integer to point out the column index corresponding to the coefficient for the generalized linear mode (GLM) testing in BPSC. Default value is 2.
-#' @param BPSC.normalize a string variable specifying the type of size factor estimation in BPSC method. Possible values: "TMM", "RLE", "CPM", "TPM". Default is "CPM".
+#' @param BPSC.normalize a string variable specifying the type of size factor estimation in BPSC method. Possible values: "TMM", "RLE", "CPM". Default is "CPM".
 #' @param BPSC.parallel a boolean variable that defines whether to execute parallel computing for BPSC method. Default is TRUE.
 #' @param DEsingle.parallel a boolean variable that defines whether to execute parallel computing for DEsingle method. Default is TRUE.
-#' @param DEsingle.normalize a string variable specifying the type of size factor estimation in DEsingle method. Possible values: "TMM", "RLE", "CPM", "TPM". Default is "CPM".
+#' @param DEsingle.normalize a string variable specifying the type of size factor estimation in DEsingle method. Possible values: "TMM", "RLE", "CPM". Default is "CPM".
 #' @param DESeq2.test  a string variable specifying the type of test the difference in deviance between a full and reduced model formula in DESeq2 method. Possible values: "Wald" or "LRT". The values represent Wald tests or likelihood ratio test. Default is "Wald".
 #' @param DESeq2.parallel a boolean variable that defines whether to execute parallel computing for DESeq2 method. Default is TRUE. The parallel computing may fail on Windows system. Default is TRUE.
 #' @param DESeq2.beta.prior a boolean variable that defines whether or not to put a zero-mean normal prior on the non-intercept coefficient in DESeq2 method. Default is TRUE.
 #' @param DESeq2.fitType a string variable specifying the type of fitting of dispersions to the mean intensity in DESeq2 method. Possible values: "parametric", "local", "mean". Default is "parametric".
-#' @param DESeq2.normalize a string variable specifying the type of size factor estimation in DESeq2 method. Possible values: "TMM", "RLE", "CPM", "TPM". Default is "CPM".
+#' @param DESeq2.normalize a string variable specifying the type of size factor estimation in DESeq2 method. Possible values: "TMM", "RLE", "CPM". Default is "CPM".
 #' @param edgeR.Test a string variable specifying the type of fitting distribution to count data for each gene. Possible values: "LRT", "QLFT". The values represent negative binomial generalized log-linear model and quasi-likelihood negative binomial generalized log-linear model. Default is "QLFT".
-#' @param edgeR.normalize a string variable specifying the type of size factor estimation in edgeR method. Possible values: "TMM", "RLE", "CPM", "TPM". Default is "CPM".
+#' @param edgeR.normalize a string variable specifying the type of size factor estimation in edgeR method. Possible values: "TMM", "RLE", "CPM". Default is "CPM".
 #' @param limma.method.fit a string variable specifying the type of fitting method in limma method. Possible values: "ls", "robust". The values represent least squares and robust regression. Default is "ls".
 #' @param limma.trend a boolean variable that defines whether or not to allow an intensity-trend for the prior variance in limma method. Default is TRUE.
 #' @param limma.robust a boolean variable that defines whether or not to estimate defined prior information and variance prior against outlier sample variances in limma method. Default is TRUE.
-#' @param limma.normalize  a string variable specifying the type of size factor estimation in limma method. Possible values: "TMM", "RLE", "CPM", "TPM". Default is "CPM".
-#' @param Seurat.normalize  a string variable specifying the type of size factor estimation in Seurat method. Possible values: "TMM", "RLE", "CPM", "TPM". Default is "CPM".
+#' @param limma.normalize  a string variable specifying the type of size factor estimation in limma method. Possible values: "TMM", "RLE", "CPM". Default is "CPM".
+#' @param Seurat.normalize  a string variable specifying the type of size factor estimation in Seurat method. Possible values: "TMM", "RLE", "CPM". Default is "CPM".
 #' @param Seurat.method a string variable specifying the type of test method in Seurat method. Possible values: "LR", "bimod", "roc". The values represent likelihood-ratio test, negative binomial generalized linear model, ROC analysis. Default is "bimod".
 #' @param MAST.method a string variable specifying the type of test method in MAST method. Possible values: "glm", "glmer", "bayesglm". Default is "bayesglm".
-#' @param MAST.normalize a string variable specifying the type of size factor estimation in Seurat method. Possible values: "TMM", "RLE", "CPM", "TPM". Default is "CPM".
+#' @param MAST.normalize a string variable specifying the type of size factor estimation in Seurat method. Possible values: "TMM", "RLE", "CPM". Default is "CPM".
 #' @param MAST.parallel a boolean variable that defines whether to execute parallel computing for MAST method. Default is TRUE.
 #' @param monocle.cores the number of cores to be used while testing each gene for differential expression.. Default is 1.
-#' @param monocle.normalize a string variable specifying the type of size factor estimation in monocle method. Possible values: "TMM", "RLE", "CPM", "TPM". Default is "CPM".
+#' @param monocle.normalize a string variable specifying the type of size factor estimation in monocle method. Possible values: "TMM", "RLE", "CPM". Default is "CPM".
 #' @param scDD.alpha1 prior parameter value to be used to model each gene as a mixture of DP normals in scDD method. Default is 0.01.
 #' @param scDD.mu0 prior parameter values to be used to model each gene as a mixture of DP normals in scDD method. Default is 0.
 #' @param scDD.s0 prior parameter values to be used to model each gene as a mixture of DP normals in scDD method. Default is 0.01.
 #' @param scDD.a0 prior parameter values to be used to model each gene as a mixture of DP normals in scDD method. Default is 0.01.
 #' @param scDD.b0 prior parameter values to be used to model each gene as a mixture of DP normals in scDD method. Default is 0.01.
-#' @param scDD.normalize  a string variable specifying the type of size factor estimation in scDD method. Possible values:  "TMM", "RLE", "CPM", "TPM". Default is "CPM".
+#' @param scDD.normalize  a string variable specifying the type of size factor estimation in scDD method. Possible values:  "TMM", "RLE", "CPM". Default is "CPM".
 #' @param scDD.permutation the number of permutations to be used in calculating empirical p-values in scDD method. If the parameter value is set to 0, the full Bayes Factor will not be performed. Else, scDD method takes the nonparametric Kolmogorove-Smirnov test to identify DGEs. Default is 0.
-#' @param Ttest.normalize a string variable specifying the type of size factor estimation in t-test method. Possible values: "TMM", "RLE", "CPM", "TPM". Default is "CPM".
-#' @param Wilcoxon.normalize a string variable specifying the type of size factor estimation in Wilcoxon method. Possible values: "TMM", "RLE", "CPM", "TPM". Default is "CPM".
-#' @param zingeR.edgeR.normalize a string variable specifying the type of size factor estimation in zingeR.edgeR method. Possible values: "TMM", "RLE", "CPM", "TPM". Default is "CPM".
+#' @param Ttest.normalize a string variable specifying the type of size factor estimation in t-test method. Possible values: "TMM", "RLE", "CPM". Default is "CPM".
+#' @param Wilcoxon.normalize a string variable specifying the type of size factor estimation in Wilcoxon method. Possible values: "TMM", "RLE", "CPM". Default is "CPM".
+#' @param zingeR.edgeR.normalize a string variable specifying the type of size factor estimation in zingeR.edgeR method. Possible values: "TMM", "RLE", "CPM". Default is "CPM".
 #' @param zingeR.edgeR.maxit.EM The number of iterations for EM-algorithm in zingeR.edgeR method. If the EM-algorithm does not stop automatically, then, the algorithm may not be convergence. The user need set a larger value. Default is 100.
 #'
 #' @return a p-values matrix contains the p-values of each differential expression anlysis methods.
 #'
 #' @examples
-#' data("Grun.counts.matrix")
+#' data("Grun.counts.hvg")
 #' data("Grun.group.information")
 #' # scDD is very slow
-#' Pvals <- scDEA_individual_methods(raw.count = Grun.counts.matrix,
+#' Pvals <- scDEA_individual_methods(raw.count = Grun.counts.hvg,
 #' cell.label = Grun.group.information,  verbose = FALSE)
 #' combination.Pvals <- lancaster.combination(Pvals, weight = TRUE, trimmed = 0.2)
 #' adjusted.Pvals <- scDEA.p.adjust(combination.Pvals, adjusted.method = "bonferroni")
